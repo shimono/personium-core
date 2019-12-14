@@ -35,8 +35,8 @@ public class BoxUrlRsCmp extends BoxRsCmp {
      * @param box box
      */
     public BoxUrlRsCmp(final CellRsCmp cellRsCmp, final DavCmp davCmp,
-            final AccessContext accessContext, final Box box) {
-        super(cellRsCmp, davCmp, accessContext, box);
+             final Box box) {
+        super(cellRsCmp, davCmp, box);
     }
 
     /**

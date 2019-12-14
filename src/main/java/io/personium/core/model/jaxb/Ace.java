@@ -69,6 +69,15 @@ public final class Ace {
         this.principal.href = href;
         this.principal.all = null;
     }
+    /**
+     */
+    public void setPrincipalAll() {
+        if (this.principal == null) {
+            this.principal = new Principal();
+        }
+        this.principal.href = null;
+        this.principal.all = "all";
+    }
 
     /**
      * @return Principal/all

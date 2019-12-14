@@ -116,7 +116,7 @@ public class BoxResource {
         if (this.box != null) {
             //BoxCmp is necessary only if this Box exists
             BoxCmp davCmp = ModelFactory.boxCmp(this.box);
-            this.boxRsCmp = new BoxRsCmp(cellRsCmp, davCmp, this.accessContext, this.box);
+            this.boxRsCmp = new BoxRsCmp(cellRsCmp, davCmp, this.box);
         } else {
             //This box does not exist.
             String reqPathInfo = accessContext.getUriInfo().getPath();

@@ -45,7 +45,10 @@ import org.odata4j.core.OEntities;
 import org.odata4j.core.OEntityKey;
 import org.odata4j.core.OProperty;
 import org.odata4j.edm.EdmEntitySet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import io.personium.common.auth.token.ResidentLocalAccessToken;
 import io.personium.common.auth.token.Role;
 import io.personium.common.auth.token.TransCellAccessToken;
 import io.personium.common.auth.token.UnitLocalUnitUserToken;
@@ -64,6 +67,9 @@ import io.personium.test.utils.UrlUtils;
  */
 @Category({ Unit.class })
 public class AccessContextTest {
+    /** Logger. */
+    static Logger log = LoggerFactory.getLogger(AccessContextTest.class);
+
 
     /**
      * Master Token.
@@ -98,67 +104,13 @@ public class AccessContextTest {
     }
 
     /**
-     * testGetCellのテスト.
-     */
-    @Test
-    @Ignore
-    public void testGetCell() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * testGetTypeのテスト.
-     */
-    @Test
-    @Ignore
-    public void testGetType() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * testGetSubjectのテスト.
-     */
-    @Test
-    @Ignore
-    public void testGetSubject() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * testGetSchemaのテスト.
-     */
-    @Test
-    @Ignore
-    public void testGetSchema() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * testAddRoleのテスト.
-     */
-    @Test
-    @Ignore
-    public void testAddRole() {
-        fail("Not yet implemented");
-    }
-
-    /**
-     * testGetRoleListのテスト.
-     */
-    @Test
-    @Ignore
-    public void testGetRoleList() {
-        fail("Not yet implemented");
-    }
-
-    /**
      */
     @Test
     public void create_NoAuthzHeader_ShouldReturn_TypeAnonymous() {
         Cell cell = (Cell) mock(Cell.class);
         when(cell.authenticateAccount((OEntityWrapper) any(), anyString())).thenReturn(true);
 
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(null, null, null, null,
                 cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(accessContext.getType(), AccessContext.TYPE_ANONYMOUS);
@@ -181,34 +133,34 @@ public class AccessContextTest {
         );
         when(cell.getAccount(anyString())).thenReturn(oew);
         when(cell.authenticateAccount((OEntityWrapper) any(), anyString())).thenReturn(true);
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(auth,
                 null, null, null, cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_BASIC, accessContext.getType());
     }
 
     /**
-     * testCreateBasicでInvalidになるテスト.
+     * create method with Basic auth format but invalid content should return TYPE_INVALID.
      */
     @Test
-    public void create_Basic_INVALID() {
+    public void create_Basic_When_InvalidHeaderContentGiven_ShouldReturn_TypeInvalid() {
         String auth = "Basic "
                 + CommonUtils.encodeBase64Url("user:pass".getBytes());
         Cell cell = (Cell) mock(Cell.class);
         when(cell.authenticateAccount((OEntityWrapper) any(), anyString())).thenReturn(false);
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(auth,
                 null, null, null, cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(accessContext.getType(), AccessContext.TYPE_INVALID);
     }
 
     /**
-     * Bearer形式 マスタートークンを指定して、UNIT_MASTERのアクセスコンテキストが取得できること.
+     * create method with Bearer format with MasterToken then TYPE_UNIT_MASTER.
      */
     @Test
     public void create_Bearer_MasterToken_ShouldReturn_TypeUnitMaster() {
         String authzHeader = "Bearer " + MASTER_TOKEN;
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(authzHeader,
                 null, null, null, null, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_UNIT_MASTER, accessContext.getType());
@@ -222,7 +174,7 @@ public class AccessContextTest {
         // 「dGVzdA==」=>「test」のBase64化した文字列
         String authzHeader = "Bearer dGVzdA==";
         System.out.println(authzHeader);
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(authzHeader,
                 null, null, null, null, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_INVALID, accessContext.getType());
@@ -235,7 +187,7 @@ public class AccessContextTest {
     public void create_BearerOnly_ShouldReturn_TypeInvalid() {
         String authzHeader = "Bearer";
         System.out.println(authzHeader);
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(authzHeader,
                 null, null, null, null, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_INVALID, accessContext.getType());
@@ -248,7 +200,7 @@ public class AccessContextTest {
     public void create_BearerSpace_ShouldReturn_TypeInvalid() {
         String authzHeader = "Bearer ";
         System.out.println(authzHeader);
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(authzHeader,
                 null, null, null, null, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_INVALID, accessContext.getType());
@@ -279,7 +231,7 @@ public class AccessContextTest {
         String encodedCookieValue = uluut.getCookieString(dcCookiePeer,
                 AccessContext.getCookieCryptKey(uriInfo.getBaseUri().getHost()));
 
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(null, uriInfo, dcCookiePeer, encodedCookieValue,
                 cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_UNIT_LOCAL, accessContext.getType());
@@ -314,7 +266,7 @@ public class AccessContextTest {
         String encodedCookieValue = token.getCookieString(dcCookiePeer,
                 AccessContext.getCookieCryptKey(uriInfo.getBaseUri().getHost()));
 
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(null, uriInfo, dcCookiePeer, encodedCookieValue,
                 cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_VISITOR, accessContext.getType());
@@ -345,7 +297,7 @@ public class AccessContextTest {
         String basicAuth = "Basic "
                 + CommonUtils.encodeBase64Url("user:pass".getBytes());
 
-        // 第1引数は AuthHeader, 第2引数は UriInfo, 第3引数は cookie_peer, 第4引数は cookie内の暗号化されたトークン情報
+        // 1st argument is AuthHeader, 2nd UriInfo, 3rd cookie_peer, 4th encrypted token info inside cookie
         AccessContext accessContext = AccessContext.create(basicAuth, uriInfo, pCookiePeer, encodedCookieValue,
                 cell, BASE_URL, UrlUtils.getHost(), OWNER);
         assertEquals(AccessContext.TYPE_INVALID, accessContext.getType());

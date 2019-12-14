@@ -147,7 +147,7 @@ public class BarFileExporterTest {
 
         AccessContext ac = null;
         CellRsCmp cellCmp = new CellRsCmp(dcCell, box.getCell(), ac);
-        return new BoxRsCmp(cellCmp, dcBox, ac, box);
+        return new BoxRsCmp(cellCmp, dcBox, box);
     }
 
 

@@ -64,7 +64,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
         doReturn(true).when(ac).isUnitUserToken(privilege);
 
@@ -88,7 +88,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
         doReturn(false).when(ac).isUnitUserToken(privilege);
         doReturn("testSchema").when(ac).getSchema();
@@ -114,7 +114,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
 
         doReturn(false).when(ac).isUnitUserToken(privilege);
@@ -150,7 +150,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
 
         doReturn(false).when(ac).isUnitUserToken(privilege);
@@ -194,7 +194,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
 
         doReturn(false).when(ac).isUnitUserToken(privilege);
@@ -239,7 +239,7 @@ public class BoxUrlRsCmpTest {
         Privilege privilege = null;
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, ac, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, ac), null, null));
         doReturn(AcceptableAuthScheme.BEARER).when(boxUrlRsCmp).getAcceptableAuthScheme();
 
         doReturn(false).when(ac).isUnitUserToken(privilege);
@@ -279,7 +279,7 @@ public class BoxUrlRsCmpTest {
         AccessContext ac = mock(AccessContext.class);
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, null), null, null, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, null), null, null));
 
         doReturn(null).when(boxUrlRsCmp).getBox();
         doNothing().when(ac).checkSchemaMatches(null);
@@ -310,7 +310,7 @@ public class BoxUrlRsCmpTest {
         AccessContext ac = mock(AccessContext.class);
 
         // Mock settings
-        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, null), null, null, null));
+        boxUrlRsCmp = PowerMockito.spy(new BoxUrlRsCmp(new CellRsCmp(null, null, null), null, null));
 
         doReturn(null).when(boxUrlRsCmp).getBox();
         doThrow(PersoniumCoreException.Auth.SCHEMA_MISMATCH).when(ac).checkSchemaMatches(null);

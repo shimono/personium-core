@@ -37,7 +37,6 @@ import io.personium.core.utils.UriUtils;
 public class BoxRsCmp extends DavRsCmp {
 
     Cell cell;
-    AccessContext accessContext;
     Box box;
 
     /**
@@ -47,10 +46,9 @@ public class BoxRsCmp extends DavRsCmp {
      * @param accessContext AccessContext
      * @param box box
      */
-    public BoxRsCmp(final CellRsCmp cellRsCmp, final DavCmp davCmp, final AccessContext accessContext, final Box box) {
+    public BoxRsCmp(final CellRsCmp cellRsCmp, final DavCmp davCmp, final Box box) {
         super(cellRsCmp, davCmp);
         this.cell = cellRsCmp.getCell();
-        this.accessContext = accessContext;
         this.box = box;
     }
     /**
@@ -84,7 +82,7 @@ public class BoxRsCmp extends DavRsCmp {
      * @return AccessContext
      */
     public AccessContext getAccessContext() {
-        return this.accessContext;
+        return this.parent.getAccessContext();
     }
 
     /**

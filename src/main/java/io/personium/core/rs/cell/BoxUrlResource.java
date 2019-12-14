@@ -104,7 +104,7 @@ public class BoxUrlResource {
         // Only when it is necessary to acquire ACL of box, obtain box and check.
         //Validity check of the authentication token (such as tokens that have expired)
         DavCmp davCmp = ModelFactory.boxCmp(box);
-        DavRsCmp boxUrlRsCmp = new BoxUrlRsCmp(this.cellRsCmp, davCmp, this.accessContext, box);
+        DavRsCmp boxUrlRsCmp = new BoxUrlRsCmp(this.cellRsCmp, davCmp, box);
         boxUrlRsCmp.checkAccessContext(BoxPrivilege.READ);
 
         // Response body
